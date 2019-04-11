@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+worklog_dir="$HOME/Documents/worklog"
+
+mkdir -p "$worklog_dir"
+
+dt="$(date +%F)"
+
+if [ $# -eq 0 ]; then
+	files="$(find "$worklog_dir" -type f | tail -n 2)"
+
+	if [ -z "$files" ]; then
+		echo "no work has been recorded yet"
+		exit 0
+	fi
+
+	for file in $files; do
+		filename="${file##*/}"
+		echo "# ${filename%.txt} #"
+		cat "$file"
+		echo
+	done
+
+	exit 0
+fi
+
+if [ $# -gt 0 ]; then
+	echo "- $*" >> "$worklog_dir/$dt.txt"
+	echo "entry recorded"
+fi
